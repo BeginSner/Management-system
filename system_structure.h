@@ -1,3 +1,5 @@
+#ifndef __SYSTEM_STRUCTURE_H__
+#define __SYSTEM_STRUCTURE_H__
 #include <iostream>
 using namespace std;
 //学生生日日期的类
@@ -25,9 +27,9 @@ public:
 class Person
 {
 protected:
-    string name;//姓名
-    string sex;//性别
-    BirthDate birth;//出生日期
+    string name;     //姓名
+    string sex;      //性别
+    BirthDate birth; //出生日期
 
 public:
     Person();
@@ -36,10 +38,10 @@ public:
     ~Person();
     //输出所有Person类属性，按照构造函数参数顺序进行排序
     //参数无，返回值无
-    virtual void display();
+    virtual void display() {}
     //输入Person类对象的所有属性，按照构造函数参数顺序进行排序
     //参数无，返回值无
-    virtual void input();
+    void input();
 };
 
 //继承Person类的学生类
@@ -50,6 +52,8 @@ protected:
     string course[5]; //五门课的名字
     double score[5];  //五门课对应的成绩
     double total;     //总分
+    int stu_num;      //学生总人数
+    int added_num;    //增加的学生人数
 public:
     Student();
     //按照参数顺序取首字母的构造函数参数
@@ -63,10 +67,10 @@ public:
     friend ostream &operator<<(ostream &out, Student &s);
     //显示学生类的所有属性，按照构造函数中参数顺序输出
     //参数无，返回值无
-    void display();
+    void display(){}
     //输入学生类所有属性
     //参数学生类指针，返回值无
-    void input(Student *s);
+    void input(Student *s){}
 };
 //大学生类继承学生类
 class Undergraduate : public Student
@@ -85,24 +89,29 @@ public:
     //参数ostream对象，大学生类对象，返回值ostream对象
     friend ostream &operator<<(ostream &out, Undergraduate &u);
     //参数无，返回值无
-    void display();                                                     //显示大学生类的所有属性，按照构造函数中参数顺序输出
-    //参数大学生类对象指针，返回值无 
-    void input(Undergraduate *u);                                       //输入大学生类所有属性
-    //参数大学生类对象指针，返回值无 
-    void add(Undergraduate *u);                                         //添加学生
-    //参数大学生类对象指针，返回值无 
-    void remove(Undergraduate *u);                                      //移除学生
-    //参数大学生类对象指针，返回值无 
-    void change(Undergraduate *u);                                      //修改学生信息
-    //参数大学生类对象指针，返回值无 
-    friend void search(Undergraduate *u);                               //查询学生信息
-    //参数指向常量大学生类对象指针，学号常量，返回值布尔值，学号唯一返回1，学号不唯一返回0 
-    bool unique(const Undergraduate *u, const string i);                //判断该学号是否重复
+    void load(Undergraduate *u); //将文件中大学生类所有属性加载到内存
+    //参数无，返回值无
+    void display(Undergraduate *u); //显示大学生类的所有属性，按照构造函数中参数顺序输出
+    //参数大学生类对象指针，返回值无
+    int input(Undergraduate *u); //从键盘输入大学生类所有属性
+    //参数无，返回值无
+    void save(Undergraduate *u); //将大学生类所有属性存入文件
+    //参数大学生类对象指针，返回值无
+    void add(Undergraduate *u); //添加学生
+    //参数大学生类对象指针，返回值无
+    void remove(Undergraduate *u); //移除学生
+    //参数大学生类对象指针，返回值无
+    void change(Undergraduate *u); //修改学生信息
+    //参数大学生类对象指针，返回值无
+    void search(Undergraduate *u); //查询学生信息
+    //参数指向常量大学生类对象指针，学号常量，返回值布尔值，学号唯一返回1，学号不唯一返回0
+    bool unique(const Undergraduate *u, const string id); //判断该学号是否重复
     //参数指向常量大学生类对象指针，布尔值判断升序还是降序，1为升序，0为降序，返回值无
-    friend void sort_by_grade(const Undergraduate *u, bool up_or_down); //排名（升序或降序）
+    void sort_by_grade(Undergraduate *u, bool up_or_down); //排名（升序或降序）
     //参数指向常量大学生类对象指针，返回值无
-    friend void fail(const Undergraduate *u);                           //判断是否挂科，所有课程成绩中分数低于60即为挂科，将课程与分数输出
+    void fail(Undergraduate *u); //判断是否挂科，所有课程成绩中分数低于60即为挂科，将课程与分数输出
     //选择界面函数，显示所有可供选择的对大学生类对象的操作，根据键盘输入选择不同的函数进行操作
     //参数指向常量大学生类对象指针，返回值无
     void panel(Undergraduate *u);
 };
+#endif
