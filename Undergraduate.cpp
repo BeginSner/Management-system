@@ -249,7 +249,7 @@ void Undergraduate::display(Undergraduate *u)
         cout << u[i - 1] << endl;
     }
 }
-int Undergraduate::input(Undergraduate *u)
+Undergraduate *Undergraduate::input(Undergraduate *u)
 {
 
     cout << "请输入要导入信息的学生人数: " << endl;
@@ -262,19 +262,19 @@ int Undergraduate::input(Undergraduate *u)
     stu_num = n;
     cout << "输入学生信息" << endl;
     // cout << "专业 姓名 性别 出生日期:年 月 日 学号 课程1 分数1 课程2 分数2 课程3 分数3 课程4 分数4 课程5 分数5" << endl;
+    Undergraduate tmp[N];
     try
-    {
-        Undergraduate tmp[N];
-        load(tmp);
+    {    
+        load(u);
         for (int i = 0; i < n; i++)
         {
-            cin >> u[i];
-            if (!unique(tmp, u[i].id))
-                throw u[i].id;
-            if (u[i].score[0] < 0 || u[i].score[0] > 100 || u[i].score[1] < 0 || u[i].score[1] > 100 || u[i].score[2] < 0 || u[i].score[2] > 100 || u[i].score[3] < 0 || u[i].score[3] > 100 || u[i].score[4] < 0 || u[i].score[4] > 100)
+            cin >> tmp[i];
+            if (!unique(u, tmp[i].id))
+                throw u[0].id;
+            if (tmp[i].score[0] < 0 || tmp[i].score[0] > 100 || tmp[i].score[1] < 0 || tmp[i].score[1] > 100 || tmp[i].score[2] < 0 || tmp[i].score[2] > 100 || tmp[i].score[3] < 0 || tmp[i].score[3] > 100 || tmp[i].score[4] < 0 || tmp[i].score[4] > 100)
                 throw -1;
-            if (u[i].birth.year <= 1980 || u[i].birth.year > 2004 || u[i].birth.month < 1 || u[i].birth.month > 12 || u[i].birth.day < 1 || u[i].birth.day > 31)
-                throw u[i].birth;
+            if (tmp[i].birth.year <= 1980 || tmp[i].birth.year > 2004 || tmp[i].birth.month < 1 || tmp[i].birth.month > 12 || tmp[i].birth.day < 1 || tmp[i].birth.day > 31)
+                throw u[0].birth;
         }
     }
     catch (int)
@@ -292,26 +292,22 @@ int Undergraduate::input(Undergraduate *u)
         cout << "学号已存在,请重新输入" << endl;
         return 0;
     }
-    return 1;
+    return tmp;
 }
 void Undergraduate::save(Undergraduate *u)
 {
     ofstream outfile("Undergraduate.dat", ios::out | ios::trunc);
-    int flag = input(u);
-    if (!flag)
-        return;
+    Undergraduate *tmp = input(u);
     for (int i = 0; i < stu_num; ++i)
-        outfile << u << endl;
+        outfile << tmp << endl;
     outfile.close();
 }
 void Undergraduate::add(Undergraduate *u)
 {
     ofstream outfile("Undergraduate.dat", ios::out | ios::app);
-    int flag = input(u);
-    if (!flag)
-        return;
+    Undergraduate *tmp = input(u);
     for (int i = 0; i < stu_num; ++i)
-        outfile << u << endl;
+        outfile << tmp << endl;
     outfile.close();
 }
 void Undergraduate::remove(Undergraduate *u)
@@ -321,9 +317,7 @@ void Undergraduate::remove(Undergraduate *u)
     cin >> id;
     load(u);
     for (int i = 0; i < stu_num; ++i)
-    {
-        if (i == stu_num)
-            cout << "未找到对应学号的学生，删除失败" << endl;
+    {  
         if (id == u[i].id)
         {
             for (int j = i + 1; j < stu_num; ++j)
@@ -337,6 +331,7 @@ void Undergraduate::remove(Undergraduate *u)
             break;
         }
     }
+    cout << "未找到对应学号的学生，删除失败" << endl;
 }
 void Undergraduate::change(Undergraduate *u)
 {
@@ -346,8 +341,7 @@ void Undergraduate::change(Undergraduate *u)
     load(u);
     for (int i = 0; i < stu_num; ++i)
     {
-        if (i == stu_num)
-            cout << "未找到对应学号的学生，修改失败" << endl;
+
         if (id == u[i].id)
         {
             cout << "输入学生信息" << endl;
@@ -377,6 +371,7 @@ void Undergraduate::change(Undergraduate *u)
             break;
         }
     }
+    cout << "未找到对应学号的学生，修改失败" << endl;
 }
 void Undergraduate::search(Undergraduate *u)
 {
@@ -386,24 +381,22 @@ void Undergraduate::search(Undergraduate *u)
     load(u);
     for (int i = 0; i < stu_num; ++i)
     {
-        if (i == stu_num)
-            cout << "未找到对应学号的学生，修改失败" << endl;
         if (id == u[i].id)
         {
             cout << "该名学生信息如下" << endl;
             cout << u[i] << endl;
         }
     }
+    cout << "未找到对应学号的学生，查询失败" << endl;
 }
 bool Undergraduate::unique(const Undergraduate *u, const string id)
 {
     for (int i = 0; i < stu_num; ++i)
     {
-        if (i == stu_num)
-            return 1;
         if (id == u[i].id)
             return 0;
     }
+    return 1;
 }
 void Undergraduate::sort_by_grade(Undergraduate *u, bool up_or_down)
 {

@@ -93,7 +93,7 @@ public:
     //参数无，返回值无
     void display(Undergraduate *u); //显示大学生类的所有属性，按照构造函数中参数顺序输出
     //参数大学生类对象指针，返回值无
-    int input(Undergraduate *u); //从键盘输入大学生类所有属性
+    Undergraduate *input(Undergraduate *u); //从键盘输入大学生类所有属性
     //参数无，返回值无
     void save(Undergraduate *u); //将大学生类所有属性存入文件
     //参数大学生类对象指针，返回值无
